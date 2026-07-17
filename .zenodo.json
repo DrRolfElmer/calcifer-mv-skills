@@ -25,12 +25,5 @@
   "license": "cc-by-4.0",
   "version": "1.0.0",
   "language": "eng",
-  "related_identifiers": [
-    {
-      "relation": "isSupplementTo",
-      "identifier": "arXiv:PENDING",
-      "scheme": "arxiv"
-    }
-  ],
   "notes": "The paper's arXiv/venue identifier is added to related_identifiers once assigned. Canonical skill sources: docs/skills/<name>/SKILL.md in the project repository."
 }
