@@ -1,12 +1,12 @@
 {
-  "title": "Machine-readable measurement-and-verification agent skills (supplementary to the CCAI@NeurIPS 2026 paper)",
+  "title": "Machine-readable measurement-and-verification agent skills",
   "upload_type": "publication",
   "publication_type": "other",
-  "description": "The four machine-readable 'agent skills' that are the central artifact of the paper 'Encoding measurement-and-verification discipline as machine-readable skills so an AI agent enforces it' (Tackling Climate Change with ML @ NeurIPS 2026, Papers track). Each skill is a short structured document an AI analysis agent loads automatically when a task matches its triggering description, encoding the mechanical half of a building-energy research programme's measurement-and-verification (M&V) discipline so the agent enforces it by construction: gold-standard (operational/dev standard), research-standard (epistemic ranking, non-circularity, corrections, honest limits), invariant8-mask (a data loader flagging experiment-contaminated and frozen-logger rows), and dhw-cycle-analysis (domain signal-semantics pitfalls). Methodology documents only; the controller source code and all personal/household data are excluded. CC-BY-4.0.",
+  "description": "The four machine-readable 'agent skills' that are the central artifact of the paper 'Encoding measurement-and-verification discipline as machine-readable skills so an AI agent enforces it' (R. Elmér, preprint, 2026). Each skill is a short structured document an AI analysis agent loads automatically when a task matches its triggering description, encoding the mechanical half of a building-energy research programme's measurement-and-verification (M&V) discipline so the agent enforces it by construction: gold-standard (operational/dev standard), research-standard (epistemic ranking, non-circularity, corrections, honest limits), invariant8-mask (a data loader flagging experiment-contaminated and frozen-logger rows), and dhw-cycle-analysis (domain signal-semantics pitfalls). Version 1.1.0 is the state of 1 October 2026 behind the paper's line counts. Methodology documents only; the controller source code and all personal/household data are excluded. CC-BY-4.0.",
   "creators": [
     {
       "name": "Elmér, Rolf",
-      "affiliation": "Nordregio",
+      "affiliation": "Independent Researcher",
       "orcid": "0009-0007-6735-3256"
     }
   ],
@@ -19,11 +19,11 @@
     "AI agents",
     "research rigor",
     "agent skills",
-    "climate change AI",
-    "home energy management"
+    "home energy management",
+    "software testing"
   ],
   "license": "cc-by-4.0",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "language": "eng",
-  "notes": "The paper's arXiv/venue identifier is added to related_identifiers once assigned. Canonical skill sources: docs/skills/<name>/SKILL.md in the project repository."
+  "notes": "The paper's engrXiv DOI is added to related_identifiers after posting (metadata edit, no new version). Canonical skill sources: docs/skills/<name>/SKILL.md in the project repository."
 }
