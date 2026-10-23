@@ -12,14 +12,17 @@ measurement-and-verification (M&V) discipline so the agent enforces it *by const
 
 | Skill | Lines | Role |
 |---|---|---|
-| `calcifer-gold-standard` | 199 | operational / dev standard |
+| `calcifer-gold-standard` | 212 | operational / dev standard |
 | `calcifer-research-standard` | 71 | epistemic ranking, non-circularity, corrections, honest limits |
 | `invariant8-mask` | 68 | data loader flagging experiment-contaminated and frozen-logger rows |
 | `dhw-cycle-analysis` | 77 | domain signal-semantics pitfalls |
 
 ## Versions
-- **1.1.0 (October 2026)** — the skills as of 1 October 2026, the repository state behind the line
-  counts in the paper's §2. Gold-standard grew from 86 to 199 lines and dhw-cycle-analysis from 57 to
+- **1.2.0 (October 2026)** — adds the preprint itself as `paper/paper9b_preprint.pdf`
+  (counts re-measured as of 22 October 2026) and the skills as of 12 October 2026, the repository
+  state behind the line counts in the paper's §2. Gold-standard grew from 199 to 212 lines (a section
+  on the defect classes code reviews keep finding); the other three are unchanged from 1.1.0.
+- **1.1.0 (October 2026)** — the skills as of 1 October 2026. Gold-standard grew from 86 to 199 lines and dhw-cycle-analysis from 57 to
   77 lines since 1.0.0; research-standard and invariant8-mask are unchanged.
 - **1.0.0 (July 2026)** — the initial deposit.
 
@@ -38,8 +41,9 @@ in §3 of the paper, including the post-freeze evidence in §3.6, are backed by 
 artifacts **available on request**.
 
 ## Citation
-Cite the paper as the primary reference; cite this deposit by its Zenodo concept DOI
-(10.5281/zenodo.21420254, all versions) or by the version DOI of 1.1.0.
+Cite the paper (included in this deposit from version 1.2.0) as the primary reference; cite this
+deposit by its Zenodo concept DOI (10.5281/zenodo.21420254, all versions) or by the version DOI of
+the version you used.
 
 ## Reader's note on internal cross-references
 These skills were authored for internal use and cross-reference a private project-instructions

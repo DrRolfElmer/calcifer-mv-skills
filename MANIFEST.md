@@ -5,17 +5,19 @@ drifts from the repository. Files to include in the Zenodo upload:
 
 | In bundle as | Canonical source (repo) | Lines |
 |---|---|---|
-| `skills/calcifer-gold-standard.md` | `docs/skills/calcifer-gold-standard/SKILL.md` | 199 |
+| `skills/calcifer-gold-standard.md` | `docs/skills/calcifer-gold-standard/SKILL.md` | 212 |
 | `skills/calcifer-research-standard.md` | `docs/skills/calcifer-research-standard/SKILL.md` | 71 |
 | `skills/invariant8-mask.md` | `docs/skills/invariant8-mask/SKILL.md` | 68 |
 | `skills/dhw-cycle-analysis.md` | `docs/skills/dhw-cycle-analysis/SKILL.md` | 77 |
+| `paper/paper9b_preprint.pdf` (from 1.2.0) | `docs/drafts/paper9b/latex/paper9b_zenodo_v1.pdf` (build: `latex/build_zenodo.sh`) | 8 pages |
 | `README.md` | `docs/drafts/paper9b/supplementary/README.md` | — |
 | `LICENSE` | `docs/drafts/paper9b/supplementary/LICENSE` | — |
 | `.zenodo.json` (metadata) | `docs/drafts/paper9b/supplementary/.zenodo.json` | — |
 
 ## Assembly (run from the repo root)
 ```
-mkdir -p build/mv_skills_supplementary/skills
+mkdir -p build/mv_skills_supplementary/skills build/mv_skills_supplementary/paper
+cp docs/drafts/paper9b/latex/paper9b_zenodo_v1.pdf build/mv_skills_supplementary/paper/paper9b_preprint.pdf
 cp docs/skills/calcifer-gold-standard/SKILL.md   build/mv_skills_supplementary/skills/calcifer-gold-standard.md
 cp docs/skills/calcifer-research-standard/SKILL.md build/mv_skills_supplementary/skills/calcifer-research-standard.md
 cp docs/skills/invariant8-mask/SKILL.md          build/mv_skills_supplementary/skills/invariant8-mask.md

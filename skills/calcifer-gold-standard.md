@@ -16,7 +16,7 @@ trust; the operator restarts, nothing more. Every rule below is a POINTER into
 PI is the single source of truth; this skill never copies PI prose, only operationalizes it.
 
 ## 1. Pre-flight (before touching anything)
-- Read the PI § that owns the area you are changing (component table: PI §1; invariants: PI §3).
+- Read the PI § that owns the area you are changing (component table: PI §1; invariants: PI §3). New task: consult the advisor BEFORE the final design (after orientation, before the first write) and again before reporting "done" (deliverable committed/pushed first) → PI §4.18.
 - Analysing time-series data? Load it via the `invariant8-mask` skill / `tools.mv_invariant8`
   (never bare `read_csv`) — experiment windows + freeze-traps. → PI §5 Invariant #8.
 - Control-path, MPC-objective or IPMVP-baseline adjacent? STOP and check the M&V firewall
@@ -84,7 +84,20 @@ PI is the single source of truth; this skill never copies PI prose, only operati
   det högljutt på ett förvirrande `unexpected EOF ... matching \`''` — **utan heredoc kan en
   halv rad köras TYST**, vilket är det farliga fallet. Skriv i stället filen med **Write**
   (JSON-kanalen: ingen shell-tolkning, ingen storleksgräns, inga citatteckenproblem) och kör
-  filen. Vakt: `tools/hooks/bash_cmd_size_gate.py` (PreToolUse, blockerar ≥ 7 000 B).
+  filen. Vakt: `tools/hooks/bash_cmd_size_gate.py` (PreToolUse, blockerar ≥ 7 000 B). Heredoc kollapsar backslashar (SyntaxWarning = STOPP); Session 0/xdist: `-n 4` i grinden, 0xC0000142 = resursbrist, kör om seriellt → PI §4.17.
+
+## 3b. The defect classes reviews keep finding (→ PI §4.20, ur 22 granskningspass)
+- **Mutation proof (K3).** A guard or a fix is done when every load-bearing line has a mutant the suite kills;
+  the commit says "N/N mutants". A surviving mutant is a finding — pin it or delete the line.
+- **Unknown stays unknown (K1).** Missing/NaN/unreadable/failed → None/UNKNOWN, propagated. Any coercion to
+  0/False/max/fresh (`or 0`, `?? 0`, `Number(null)`, a NaN-washing clamp) carries its reason in the code.
+- **Atomic writes, no blocking failure state (K4).** Temp file + verify + `os.replace`; a refusal that keys on
+  existing state must never create that state by failing.
+- **A liveness guard reads what only a working source produces (K2).** Stamp at the source, on success only;
+  never mtime when the writer emits placeholders, never a stamp set on failure, never an age clamped to 0.
+- **Producer meets consumer in one test (K7)** — the real producer into the real consumer, or a test that
+  reads both sides; a synthetic block proves only the consumer.
+- **Re-read the configuration before proposing to change it (K12).** The proposal quotes the line it rests on.
 
 ## 4. Delivery pipeline (in order, no skipping)
 1. Run the affected test suites (+ the e2e) — green before commit.
@@ -114,7 +127,7 @@ PI is the single source of truth; this skill never copies PI prose, only operati
   root *.py/*.bat/*.ps1, requirements.txt) that is STALE in prod longer than the grace period
   (3 days) is **STALE UTAN SKÄL** and turns the night red — unless it has an entry in
   `tools/prod_drift_ledger.json` with a reason and a `review_by` date. The ledger is a decision,
-  not a mute button: an expired entry alarms again. Operator rule 2026-09-19. → PI §0.1.
+  not a mute button: an expired entry alarms again. Operator rule 2026-09-19. → PI §0.1. `main` (origin + lokal) fast-forwardas efter varje promote när CI är grön → PI §4.17.
 
 ### 4a. Scheduled tasks (schtasks) — one door
 
@@ -152,7 +165,7 @@ repo pipeline therefore runs on the OPERATOR's machine, not here. From the CS wo
 - PHI never enters git-tracked docs or any cloud/analysis context
   (`hems15/**/*.csv`, `RESEARCH_LOG.md`, sleep logs). → PI §3.6 + hems15 policy.
 - Frozen/byte-hashed artifacts are never "fixed" with whitespace edits. → PI §3.5/§3.6.
-- Never pool experiment-window data into a normal-operation study. → PI §5 Invariant #8.
+- Never pool experiment-window data into a normal-operation study. → PI §5 Invariant #8. Heavy computation (> a few min, a new analysis tool, a model rejected as "too slow"): ask (1) independent units ⇒ CPU processes, cap cores − 2; (2) batchable ⇒ GPU in the RIGHT env (`.gpu_venv` torch cu126 / WSL `~/tierc` JAX cuda12; `~/venvs/jax` is CPU-only); (3) does speed unlock a better model ⇒ propose to captain; parallel = identical output, GPU = tolerance + prereg addendum → PI §4.19.
 - Findings are logged with the anti-HARK discipline: pre-registered where possible,
   all-nights/all-days pooling, no cherry-picking. → PI §5.
 - **Every reference you USE goes into the register.** Cited in a paper, leaned on for a
@@ -177,7 +190,7 @@ reorganized without this skill following.
 *Impl pointers: `tools/stage_to_prod.py`, `tools/check_prod_drift.py`, `tools/mv_invariant8.py`.
 Sibling skill: `invariant8-mask`. Tracked home: `docs/skills/` (`.claude/` is gitignored);
 Code discovery = deliberate copy to `.claude/skills/calcifer-gold-standard/`.
-Changelog: r10 (2026-10-01) — personlig hemkatalog ersatt med ~ i tectonic-exemplet (publik deposition v1.1.0). r9 (2026-09-19 kväll) — §4: dev/prod-drift utan skäl är rött (check_prod_drift r5 STALE UTAN SKÄL + tools/prod_drift_ledger.json), operatörsregel efter att fem calcifer-moduler legat efter prod i upp till 12 dygn utan larm. r8 (2026-09-19) — nytt §2c: stabila identifierare först (device-id/MAC, aldrig visningsnamn), operatörsbeslut efter att namnbytet på regnmätaren tystade HEMS_07/HEMS_13 samma dag; PI §4.16 skriven i SAMMA commit per §0.4. Vakt = spärrhaken `tests/test_stable_identifier_ratchet.py` mot baslinjen 107 (`tools/stable_identifier_baseline.json`). r7 (2026-09-01) — nytt krav i §5: varje ANVAND referens laggs in i `docs/referensregister.json` (PI §4.10 skriven i SAMMA commit per §0.4). Operatorsbeslut efter Haselow et al. (2019). Matt nulage: 96 `\bibitem` + ~157 distinkta DOI:er over 20 filer utan gemensam kalla, och paper1 bar en handskriven thebibliography ingen annan artikel kunde se. Det barande faltet ar `inte_for` — overciterande ar den vanligaste formen av felcitat och varken BibTeX eller Zotero har ett falt for en sadan grans. `docs/calcifer.bib` GENERERAS ur registret. Vakt `tests/test_referensregister.py` (14 pinnar, varje obligatoriskt falt mutationsprovat ett i taget); backfillen ar task #254. r6 (2026-08-23) — nytt §2b: systemgemensamt tillstånd före modulberoende uppslag
+Changelog: r14 (2026-10-12) — nytt §3b: de sex felklasserna granskningarna hittar (mutationsbevis N/N, okänt förblir okänt, atomiska skrivningar utan spärrande feltillstånd, livsvaktens storhet, producent möter konsument, konfigurationen läses om) → PI §4.20 skriven i SAMMA commit per §0.4 (operatörsbeslut GS-1). **199-radstaket upphävt** (operatörsbeslut GS-0 "bättre att uppdatera talen i 9b än att begränsa standarden"): 9b:s radtal räknas om i samma commit som skillen ändras. Underlag `docs/UTVARDERING_GRANSKNINGSERFARENHETER_2026-10-12.md`. r13 (2026-10-06 kväll) — §5: varje tung beräkning prövas för parallellisering/GPU och för den modell snabbheten öppnar → PI §4.19 (operatörsbeslut; inbakat i befintlig rad, filen kvar på 199 rader). r12 (2026-10-04 kväll) — §1: rådgivaren före slutdesignen av varje ny uppgift OCH före "klart" → PI §4.18 (operatörsbeslut; inbakat i befintlig rad, filen kvar på 199 rader för paper9b). r11 (2026-10-04) — §3 Session 0/xdist + heredoc-backslashar, §4 `main` fast-forwardas efter varje promote; båda pekar på PI §4.17 (skriven i SAMMA commit per §0.4) och är INBAKADE i befintliga rader — filen ska vara 199 rader så länge paper9b citerar depositionen v1.1.0 (tests/test_paper9b_numbers G1; kaptensbeslut 4/10), operatörsbeslut efter att CI var röd fem nätter på `main` @ 25/9 och run_sync-pushen avvisats sedan 21/9. r10 (2026-10-01) — personlig hemkatalog ersatt med ~ i tectonic-exemplet (publik deposition v1.1.0). r9 (2026-09-19 kväll) — §4: dev/prod-drift utan skäl är rött (check_prod_drift r5 STALE UTAN SKÄL + tools/prod_drift_ledger.json), operatörsregel efter att fem calcifer-moduler legat efter prod i upp till 12 dygn utan larm. r8 (2026-09-19) — nytt §2c: stabila identifierare först (device-id/MAC, aldrig visningsnamn), operatörsbeslut efter att namnbytet på regnmätaren tystade HEMS_07/HEMS_13 samma dag; PI §4.16 skriven i SAMMA commit per §0.4. Vakt = spärrhaken `tests/test_stable_identifier_ratchet.py` mot baslinjen 107 (`tools/stable_identifier_baseline.json`). r7 (2026-09-01) — nytt krav i §5: varje ANVAND referens laggs in i `docs/referensregister.json` (PI §4.10 skriven i SAMMA commit per §0.4). Operatorsbeslut efter Haselow et al. (2019). Matt nulage: 96 `\bibitem` + ~157 distinkta DOI:er over 20 filer utan gemensam kalla, och paper1 bar en handskriven thebibliography ingen annan artikel kunde se. Det barande faltet ar `inte_for` — overciterande ar den vanligaste formen av felcitat och varken BibTeX eller Zotero har ett falt for en sadan grans. `docs/calcifer.bib` GENERERAS ur registret. Vakt `tests/test_referensregister.py` (14 pinnar, varje obligatoriskt falt mutationsprovat ett i taget); backfillen ar task #254. r6 (2026-08-23) — nytt §2b: systemgemensamt tillstånd före modulberoende uppslag
 (operatörsbeslut; PI §4.9 skriven i SAMMA commit per §0.4). Regeln har en mätning bakom sig:
 111 av server.py:s 345 modulnivåvariabler har fan-in ≥ 2 och är precis vad varje
 extraktionsvåg måste sömma — en importerbar modul kostar noll vid en söm, en global i
